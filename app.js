@@ -101,3 +101,4 @@ renderRecipes(recipes);
 console.log('Total recipes:', recipes.length);
 console.log('First recipe:', recipes[0]);
 console.log('Rendering complete!');
+// Added receipe branch update
