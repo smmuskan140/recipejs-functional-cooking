@@ -149,3 +149,49 @@ main {
     color: white;
     box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
 }
+
+.steps-container,
+.ingredients-container {
+    display: none;
+    margin-top: 1rem;
+}
+
+.steps-container.visible,
+.ingredients-container.visible {
+    display: block;
+}
+
+.card-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggle-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    border: 1px solid #667eea;
+    background: white;
+    color: #667eea;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+
+.steps-container,
+.ingredients-container {
+    display: none;
+    margin-top: 10px;
+}
+
+.visible {
+    display: block;
+}
+
+.level-1 { margin-left: 15px; }
+.level-2 { margin-left: 30px; }
+.level-3 { margin-left: 45px; }
