@@ -1,216 +1,227 @@
-// ===============================
-// Recipe Data
-// ===============================
-const recipes = [
-    {
-        id: 1,
-        title: "Classic Spaghetti Carbonara",
-        time: 25,
-        difficulty: "easy",
-        description: "A creamy Italian pasta dish made with eggs, cheese, pancetta, and black pepper.",
-        category: "pasta"
-    },
-    {
-        id: 2,
-        title: "Chicken Tikka Masala",
-        time: 45,
-        difficulty: "medium",
-        description: "Tender chicken pieces in a creamy, spiced tomato sauce.",
-        category: "curry"
-    },
-    {
-        id: 3,
-        title: "Homemade Croissants",
-        time: 180,
-        difficulty: "hard",
-        description: "Buttery, flaky French pastries that require patience but deliver amazing results.",
-        category: "baking"
-    },
-    {
-        id: 4,
-        title: "Greek Salad",
-        time: 15,
-        difficulty: "easy",
-        description: "Fresh vegetables, feta cheese, and olives tossed in olive oil and herbs.",
-        category: "salad"
-    },
-    {
-        id: 5,
-        title: "Beef Wellington",
-        time: 120,
-        difficulty: "hard",
-        description: "Tender beef fillet coated with mushroom duxelles and wrapped in puff pastry.",
-        category: "meat"
-    },
-    {
-        id: 6,
-        title: "Vegetable Stir Fry",
-        time: 20,
-        difficulty: "easy",
-        description: "Colorful mixed vegetables cooked quickly in a savory sauce.",
-        category: "vegetarian"
-    },
-    {
-        id: 7,
-        title: "Pad Thai",
-        time: 30,
-        difficulty: "medium",
-        description: "Thai stir-fried rice noodles with shrimp, peanuts, and tangy tamarind sauce.",
-        category: "noodles"
-    },
-    {
-        id: 8,
-        title: "Margherita Pizza",
-        time: 60,
-        difficulty: "medium",
-        description: "Classic Italian pizza with fresh mozzarella, tomatoes, and basil.",
-        category: "pizza"
-    }
-];
+const RecipeApp = (() => {
 
-// ===============================
-// STATE MANAGEMENT
-// ===============================
-let currentFilter = "all";
-let currentSort = "none";
+    let currentFilter = "all";
+    let currentSort = "none";
 
-// ===============================
-// DOM REFERENCES
-// ===============================
-const recipeContainer = document.querySelector('#recipe-container');
-const filterButtons = document.querySelectorAll('[data-filter]');
-const sortButtons = document.querySelectorAll('[data-sort]');
+    const recipes = [
+        {
+            id: 1,
+            title: "Classic Spaghetti Carbonara",
+            time: 25,
+            difficulty: "easy",
+            category: "pasta",
+            description: "A creamy Italian pasta dish.",
+            ingredients: [
+                "Spaghetti",
+                "Eggs",
+                "Parmesan",
+                "Pancetta",
+                "Black Pepper"
+            ],
+            steps: [
+                "Boil salted water",
+                "Cook spaghetti",
+                {
+                    text: "Prepare sauce",
+                    substeps: [
+                        "Beat eggs",
+                        "Mix cheese",
+                        "Combine eggs and cheese"
+                    ]
+                },
+                "Cook pancetta",
+                "Mix everything"
+            ]
+        },
+        {
+            id: 2,
+            title: "Chicken Tikka Masala",
+            time: 45,
+            difficulty: "medium",
+            category: "curry",
+            description: "Spiced creamy tomato chicken curry.",
+            ingredients: [
+                "Chicken",
+                "Yogurt",
+                "Tomato puree",
+                "Cream",
+                "Spices"
+            ],
+            steps: [
+                "Marinate chicken",
+                {
+                    text: "Prepare curry base",
+                    substeps: [
+                        "Heat oil",
+                        "Add onions",
+                        {
+                            text: "Add spices",
+                            substeps: [
+                                "Add cumin",
+                                "Add chili powder"
+                            ]
+                        }
+                    ]
+                },
+                "Cook chicken",
+                "Simmer sauce"
+            ]
+        },
+        {
+            id: 3,
+            title: "Vegetable Fried Rice",
+            time: 20,
+            difficulty: "easy",
+            category: "rice",
+            description: "Quick stir-fried rice with vegetables.",
+            ingredients: [
+                "Rice",
+                "Carrots",
+                "Beans",
+                "Soy sauce",
+                "Spring onions"
+            ],
+            steps: [
+                "Heat oil",
+                "Add vegetables",
+                "Add rice",
+                "Stir fry",
+                "Serve hot"
+            ]
+        }
+    ];
 
-// ===============================
-// CREATE RECIPE CARD
-// ===============================
-const createRecipeCard = (recipe) => {
-    return `
-        <div class="recipe-card" data-id="${recipe.id}">
+    const renderSteps = (steps, level = 0) => {
+        let html = "<ul>";
+
+        steps.forEach(step => {
+            if (typeof step === "string") {
+                html += `<li class="level-${level}">${step}</li>`;
+            } else {
+                html += `<li class="level-${level}">${step.text}`;
+                if (step.substeps) {
+                    html += renderSteps(step.substeps, level + 1);
+                }
+                html += "</li>";
+            }
+        });
+
+        html += "</ul>";
+        return html;
+    };
+
+    const createRecipeCard = (recipe) => {
+        return `
+        <div class="recipe-card">
             <h3>${recipe.title}</h3>
+
             <div class="recipe-meta">
-                <span>⏱️ ${recipe.time} min</span>
+                <span>⏱ ${recipe.time} mins</span>
                 <span class="difficulty ${recipe.difficulty}">
                     ${recipe.difficulty}
                 </span>
             </div>
+
             <p>${recipe.description}</p>
+
+            <div class="card-buttons">
+                <button class="toggle-btn" data-id="${recipe.id}" data-type="steps">
+                    Show Steps
+                </button>
+                <button class="toggle-btn" data-id="${recipe.id}" data-type="ingredients">
+                    Show Ingredients
+                </button>
+            </div>
+
+            <div class="steps-container" data-id="${recipe.id}">
+                ${renderSteps(recipe.steps)}
+            </div>
+
+            <div class="ingredients-container" data-id="${recipe.id}">
+                <ul>
+                    ${recipe.ingredients.map(i => `<li>${i}</li>`).join("")}
+                </ul>
+            </div>
         </div>
-    `;
-};
+        `;
+    };
 
-// ===============================
-// RENDER RECIPES
-// ===============================
-const renderRecipes = (recipesToRender) => {
-    const recipeCardsHTML = recipesToRender
-        .map(createRecipeCard)
-        .join('');
+    const getFilteredAndSortedRecipes = () => {
 
-    recipeContainer.innerHTML = recipeCardsHTML;
-};
-
-// ===============================
-// PURE FILTER FUNCTIONS
-// ===============================
-
-const filterByDifficulty = (recipes, difficulty) => {
-    if (difficulty === "all") return recipes;
-    return recipes.filter(recipe => recipe.difficulty === difficulty);
-};
-
-const filterByQuickTime = (recipes) => {
-    return recipes.filter(recipe => recipe.time < 30);
-};
-
-const applyFilter = (recipes, filterType) => {
-    if (filterType === "quick") {
-        return filterByQuickTime(recipes);
-    }
-    return filterByDifficulty(recipes, filterType);
-};
-
-// ===============================
-// PURE SORT FUNCTIONS
-// ===============================
-
-const sortByName = (recipes) => {
-    return [...recipes].sort((a, b) =>
-        a.title.localeCompare(b.title)
-    );
-};
-
-const sortByTime = (recipes) => {
-    return [...recipes].sort((a, b) =>
-        a.time - b.time
-    );
-};
-
-const applySort = (recipes, sortType) => {
-    if (sortType === "name") return sortByName(recipes);
-    if (sortType === "time") return sortByTime(recipes);
-    return recipes;
-};
-
-// ===============================
-// UPDATE DISPLAY (MAIN FUNCTION)
-// ===============================
-
-const updateDisplay = () => {
-    let updatedRecipes = recipes;
-
-    updatedRecipes = applyFilter(updatedRecipes, currentFilter);
-    updatedRecipes = applySort(updatedRecipes, currentSort);
-
-    console.log(
-        `Displaying ${updatedRecipes.length} recipes (Filter: ${currentFilter}, Sort: ${currentSort})`
-    );
-
-    renderRecipes(updatedRecipes);
-};
-// PR fix: reopening pull request
-// ===============================
-// UPDATE ACTIVE BUTTON STYLES
-// ===============================
-
-const updateActiveButtons = () => {
-    filterButtons.forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.dataset.filter === currentFilter
+        let filtered = recipes.filter(recipe =>
+            currentFilter === "all" || recipe.category === currentFilter
         );
-    });
 
-    sortButtons.forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.dataset.sort === currentSort
+        if (currentSort === "time") {
+            filtered.sort((a, b) => a.time - b.time);
+        }
+
+        if (currentSort === "difficulty") {
+            const order = { easy: 1, medium: 2, hard: 3 };
+            filtered.sort((a, b) =>
+                order[a.difficulty] - order[b.difficulty]
+            );
+        }
+
+        return filtered;
+    };
+
+    const renderRecipes = () => {
+        const container = document.getElementById("recipe-container");
+        const recipesToRender = getFilteredAndSortedRecipes();
+
+        container.innerHTML = recipesToRender
+            .map(recipe => createRecipeCard(recipe))
+            .join("");
+    };
+
+    const handleClick = (e) => {
+
+        if (!e.target.classList.contains("toggle-btn")) return;
+
+        const id = e.target.dataset.id;
+        const type = e.target.dataset.type;
+
+        const container = document.querySelector(
+            `.${type}-container[data-id="${id}"]`
         );
-    });
-};
 
-// ===============================
-// EVENT LISTENERS
-// ===============================
+        container.classList.toggle("visible");
 
-filterButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        currentFilter = button.dataset.filter;
-        updateActiveButtons();
-        updateDisplay();
-    });
-});
+        if (container.classList.contains("visible")) {
+            e.target.textContent = "Hide " + type;
+        } else {
+            e.target.textContent = "Show " + type;
+        }
+    };
 
-sortButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        currentSort = button.dataset.sort;
-        updateActiveButtons();
-        updateDisplay();
-    });
-});
+    const init = () => {
 
-// ===============================
-// INITIALIZE APP
-// ===============================
+        renderRecipes();
 
-updateDisplay();
+        document
+            .getElementById("recipe-container")
+            .addEventListener("click", handleClick);
+
+        document
+            .getElementById("filter-select")
+            .addEventListener("change", (e) => {
+                currentFilter = e.target.value;
+                renderRecipes();
+            });
+
+        document
+            .getElementById("sort-select")
+            .addEventListener("change", (e) => {
+                currentSort = e.target.value;
+                renderRecipes();
+            });
+
+        console.log("RecipeApp Ready!");
+    };
+
+    return { init };
+
+})();
+
+RecipeApp.init();

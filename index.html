@@ -2,47 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecipeJS - Your Functional Cooking Companion</title>
+    <title>Recipe Explorer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Header Section -->
     <header>
-        <h1>🍳 RecipeJS</h1>
-        <p>Your Functional Cooking Companion</p>
+        <h1>🍳 Recipe Explorer</h1>
+
+        <div class="controls">
+            <select id="filter-select">
+                <option value="all">All Categories</option>
+                <option value="pasta">Pasta</option>
+                <option value="curry">Curry</option>
+                <option value="rice">Rice</option>
+            </select>
+
+            <select id="sort-select">
+                <option value="none">Sort By</option>
+                <option value="time">Cooking Time</option>
+                <option value="difficulty">Difficulty</option>
+            </select>
+        </div>
     </header>
 
-    <!-- Main Section -->
     <main>
-
-        <!-- ✅ NEW: Filter & Sort Controls -->
-        <section class="controls">
-
-            <!-- Filter Buttons -->
-            <div class="filters">
-                <button data-filter="all" class="active">Show All</button>
-                <button data-filter="easy">Easy</button>
-                <button data-filter="medium">Medium</button>
-                <button data-filter="hard">Hard</button>
-                <button data-filter="quick">Quick (&lt; 30m)</button>
-            </div>
-
-            <!-- Sort Buttons -->
-            <div class="sorts">
-                <button data-sort="none" class="active">Default Order</button>
-                <button data-sort="name">Name (A-Z)</button>
-                <button data-sort="time">Time (Fastest First)</button>
-            </div>
-
-        </section>
-
-        <!-- Recipe Cards -->
-        <div id="recipe-container">
-            <!-- Recipe cards will be rendered here by JavaScript -->
-        </div>
-
+        <div id="recipe-container"></div>
     </main>
 
     <script src="app.js"></script>
