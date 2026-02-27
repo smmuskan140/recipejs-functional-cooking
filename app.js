@@ -1,4 +1,6 @@
+// ===============================
 // Recipe Data
+// ===============================
 const recipes = [
     {
         id: 1,
@@ -66,10 +68,22 @@ const recipes = [
     }
 ];
 
-// Select Container
-const recipeContainer = document.querySelector('#recipe-container');
+// ===============================
+// STATE MANAGEMENT
+// ===============================
+let currentFilter = "all";
+let currentSort = "none";
 
-// Create Recipe Card
+// ===============================
+// DOM REFERENCES
+// ===============================
+const recipeContainer = document.querySelector('#recipe-container');
+const filterButtons = document.querySelectorAll('[data-filter]');
+const sortButtons = document.querySelectorAll('[data-sort]');
+
+// ===============================
+// CREATE RECIPE CARD
+// ===============================
 const createRecipeCard = (recipe) => {
     return `
         <div class="recipe-card" data-id="${recipe.id}">
@@ -85,7 +99,9 @@ const createRecipeCard = (recipe) => {
     `;
 };
 
-// Render Recipes
+// ===============================
+// RENDER RECIPES
+// ===============================
 const renderRecipes = (recipesToRender) => {
     const recipeCardsHTML = recipesToRender
         .map(createRecipeCard)
@@ -94,11 +110,107 @@ const renderRecipes = (recipesToRender) => {
     recipeContainer.innerHTML = recipeCardsHTML;
 };
 
-// Initialize App
-renderRecipes(recipes);
+// ===============================
+// PURE FILTER FUNCTIONS
+// ===============================
 
-// Debug Logs (optional)
-console.log('Total recipes:', recipes.length);
-console.log('First recipe:', recipes[0]);
-console.log('Rendering complete!');
-// Added receipe branch update
+const filterByDifficulty = (recipes, difficulty) => {
+    if (difficulty === "all") return recipes;
+    return recipes.filter(recipe => recipe.difficulty === difficulty);
+};
+
+const filterByQuickTime = (recipes) => {
+    return recipes.filter(recipe => recipe.time < 30);
+};
+
+const applyFilter = (recipes, filterType) => {
+    if (filterType === "quick") {
+        return filterByQuickTime(recipes);
+    }
+    return filterByDifficulty(recipes, filterType);
+};
+
+// ===============================
+// PURE SORT FUNCTIONS
+// ===============================
+
+const sortByName = (recipes) => {
+    return [...recipes].sort((a, b) =>
+        a.title.localeCompare(b.title)
+    );
+};
+
+const sortByTime = (recipes) => {
+    return [...recipes].sort((a, b) =>
+        a.time - b.time
+    );
+};
+
+const applySort = (recipes, sortType) => {
+    if (sortType === "name") return sortByName(recipes);
+    if (sortType === "time") return sortByTime(recipes);
+    return recipes;
+};
+
+// ===============================
+// UPDATE DISPLAY (MAIN FUNCTION)
+// ===============================
+
+const updateDisplay = () => {
+    let updatedRecipes = recipes;
+
+    updatedRecipes = applyFilter(updatedRecipes, currentFilter);
+    updatedRecipes = applySort(updatedRecipes, currentSort);
+
+    console.log(
+        `Displaying ${updatedRecipes.length} recipes (Filter: ${currentFilter}, Sort: ${currentSort})`
+    );
+
+    renderRecipes(updatedRecipes);
+};
+
+// ===============================
+// UPDATE ACTIVE BUTTON STYLES
+// ===============================
+
+const updateActiveButtons = () => {
+    filterButtons.forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.filter === currentFilter
+        );
+    });
+
+    sortButtons.forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.sort === currentSort
+        );
+    });
+};
+
+// ===============================
+// EVENT LISTENERS
+// ===============================
+
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
+        updateActiveButtons();
+        updateDisplay();
+    });
+});
+
+sortButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        currentSort = button.dataset.sort;
+        updateActiveButtons();
+        updateDisplay();
+    });
+});
+
+// ===============================
+// INITIALIZE APP
+// ===============================
+
+updateDisplay();
