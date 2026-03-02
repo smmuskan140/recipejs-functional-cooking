@@ -17,18 +17,51 @@ header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 2.5rem;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 header h1 {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 header p {
     font-size: 1.1rem;
     opacity: 0.9;
+}
+
+/* 🔍 Search Bar (NEW) */
+.search-bar {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+#search-input {
+    width: 250px;
+    padding: 0.6rem 1rem;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+
+#clear-search {
+    padding: 0.5rem 0.9rem;
+    border-radius: 50%;
+    border: none;
+    background-color: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#clear-search.hidden {
+    display: none;
 }
 
 /* Main Container */
@@ -67,17 +100,13 @@ main {
     margin-bottom: 0.5rem;
 }
 
+/* Meta */
 .recipe-meta {
     display: flex;
     gap: 1rem;
     margin: 0.75rem 0;
     font-size: 0.9rem;
     color: #666;
-}
-
-.recipe-card p {
-    color: #555;
-    line-height: 1.5;
 }
 
 /* Difficulty Badge */
@@ -106,7 +135,6 @@ main {
 /* ============================= */
 /* FILTER & SORT CONTROLS */
 /* ============================= */
-
 .controls {
     margin-bottom: 2rem;
     display: flex;
@@ -115,7 +143,6 @@ main {
     align-items: center;
 }
 
-/* Group Sections */
 .filters,
 .sorts {
     display: flex;
@@ -137,30 +164,33 @@ main {
     transition: all 0.3s ease;
 }
 
-/* Hover Effect */
 .controls button:hover {
     background-color: #667eea;
     color: white;
 }
 
-/* Active Button */
 .controls button.active {
     background-color: #667eea;
     color: white;
     box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
 }
 
-.steps-container,
-.ingredients-container {
-    display: none;
-    margin-top: 1rem;
+/* ❤️ Favorite Button (NEW) */
+.favorite-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    border: 1px solid #e63946;
+    background: white;
+    color: #e63946;
+    cursor: pointer;
 }
 
-.steps-container.visible,
-.ingredients-container.visible {
-    display: block;
+.favorite-btn.active {
+    background: #f1a6ac;
+    color: white;
 }
 
+/* Card Buttons */
 .card-buttons {
     margin-top: 1rem;
     display: flex;
@@ -181,7 +211,7 @@ main {
     color: white;
 }
 
-
+/* Steps + Ingredients */
 .steps-container,
 .ingredients-container {
     display: none;
@@ -195,3 +225,23 @@ main {
 .level-1 { margin-left: 15px; }
 .level-2 { margin-left: 30px; }
 .level-3 { margin-left: 45px; }
+
+/* 📌 Recipe Counter (NEW) */
+#recipe-counter {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #444;
+    margin-top: 0.5rem;
+}
+
+/* ============================= */
+/* RESPONSIVE LAYOUT (NEW) */
+/* ============================= */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+    }
+    #search-input {
+        width: 100%;
+    }
+}
